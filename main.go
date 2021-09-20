@@ -27,7 +27,9 @@ func conexion() (conexion *sql.DB) {
 var plantillas = template.Must(template.ParseGlob("plantillas/*"))
 
 func main() {
-	http.HandleFunc("/", Inicio)
+	http.HandleFunc("/", Login)
+	http.HandleFunc("/logearse", Logearse)
+	http.HandleFunc("/inicio", Inicio)
 	http.HandleFunc("/crear", Crear)
 	http.HandleFunc("/insertar", Insertar)
 	http.HandleFunc("/borrar", Borrar)
@@ -42,6 +44,30 @@ type Empleados struct {
 	Id     int
 	Nombre string
 	Correo string
+}
+
+func Logearse(w http.ResponseWriter, r *http.Request) {
+	//conectarse a la base de datos
+	if r.Method == "POST" {
+		email := r.FormValue("email")
+		password := r.FormValue("password")
+
+		conexionestablesida := conexion()
+		comprobarexistencia, err := conexionestablesida.
+			Query("SELECT * FROM `login` WHERE email=? and password=?;", email, password)
+		if err != nil {
+			panic(err.Error())
+		}
+		if comprobarexistencia.Next() {
+			http.Redirect(w, r, "/inicio", 301)
+		} else {
+			http.Redirect(w, r, "/", 301)
+		}
+	}
+}
+
+func Login(w http.ResponseWriter, r *http.Request) {
+	plantillas.ExecuteTemplate(w, "login", nil)
 }
 
 func Inicio(w http.ResponseWriter, r *http.Request) {
