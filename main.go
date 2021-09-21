@@ -116,7 +116,7 @@ func Insertar(w http.ResponseWriter, r *http.Request) {
 		}
 		insertarregistros.Exec(nombre, correo)
 
-		http.Redirect(w, r, "/", 301)
+		http.Redirect(w, r, "/inicio", 301)
 	}
 }
 func Borrar(w http.ResponseWriter, r *http.Request) {
@@ -130,7 +130,7 @@ func Borrar(w http.ResponseWriter, r *http.Request) {
 	}
 	insertarregistros.Exec(idEmpleado)
 
-	http.Redirect(w, r, "/", 301)
+	http.Redirect(w, r, "/inicio", 301)
 }
 func Editar(w http.ResponseWriter, r *http.Request) {
 	idEmpleado := r.URL.Query().Get("id")
@@ -169,6 +169,6 @@ func Actualizar(w http.ResponseWriter, r *http.Request) {
 		}
 		modificarregistros.Exec(nombre, correo, id)
 
-		http.Redirect(w, r, "/", 301)
+		http.Redirect(w, r, "/inicio", 301)
 	}
 }
